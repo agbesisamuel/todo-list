@@ -1,0 +1,72 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Todo List App</title>
+
+		<link href="https://fonts.googleapis.com/css?family=Oswald" rel="stylesheet">
+
+		<!-- Bootstrap CSS -->
+		<link rel="stylesheet" href="{% static 'bs/css/flatly.min.css' %}" />
+		<link rel="stylesheet" href="{% static 'styles.css' %}" />
+
+	</head>
+	<body>
+
+		<div class="container-fluid" id="wrapper">
+
+			<div class="row">
+				<div class="col-lg-4 col-lg-offset-4" id="content">
+					<h2>TODOS</h2>
+
+					<form action="{% url 'todo:add_todo' %}" method="POST" role="form">
+                        {% csrf_token %}
+						<div class="form-group">
+							<div class="input-group">
+							  {{ form.title }}
+                              <span class="input-group-btn">
+								  <button type="submit" class="btn btn-default" id="add-btn">ADD</button>
+							  </span>
+							</div>
+						</div>
+					</form>
+
+					<ul class="list-group t20">
+                      {% for todo in todos %}
+                        {% if todo.completed %}
+                            <li class="list-group-item list-group-item-success d-flex justify-content-between align-items-center">
+                                {{ todo.title }}
+                                <span class="badge badge-primary badge-pill"><a href="{% url 'todo:delete_todo' todo.pk %}"><i class="glyphicon glyphicon-remove"></i></a></span>
+                                <span class="badge badge-primary badge-pill"><a href="{% url 'todo:complete_todo' todo.pk %}"><i class="glyphicon glyphicon-ok"></i></a></span>
+                                <span class="badge badge-primary badge-pill">COMPLETED</span>
+                            </li>
+                        {% else %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                {{ todo.title }}
+                                <span class="badge badge-primary badge-pill"><a href="{% url 'todo:delete_todo' todo.pk %}"><i class="glyphicon glyphicon-remove"></i></a></span>
+                                <span class="badge badge-primary badge-pill"><a href="{% url 'todo:complete_todo' todo.pk %}"><i class="glyphicon glyphicon-ok"></i></a></span>
+                            </li>
+                        {% endif %}
+                      {% endfor %}
+					</ul>
+				</div>
+			</div>
+
+			<footer>
+				<div class="row pad">
+					<div class="col-lg-12 text-center">
+
+					</div>
+				</div>
+			</footer>
+		</div>
+
+		<!-- jQuery -->
+		<script src="./bs/js/jquery.min.js"></script>
+		<!-- Bootstrap JavaScript -->
+		<script src="./bs/js/bootstrap.min.js"></script>
+	</body>
+</html>
